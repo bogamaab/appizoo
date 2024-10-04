@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken");
+
 const userSchema = require("../models/user");
 
 router.post('/signup', async(req, res) => {
@@ -13,10 +15,19 @@ router.post('/signup', async(req, res) => {
 
     user.clave = await user.encryptClave(user.clave);
     await user.save();
-    //res.json(user);
+
+    const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+        expiresIn: 60 * 60 * 24,
+    });
+
     res.json({
-        message: "Usuario guardado."
+        auth: true,
+        token
     })
+
+    //res.json({
+    //    message: "Usuario guardado."
+    //})
 });
 
 router.post('/login', async(req, res) => {
