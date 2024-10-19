@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router(); //manejador de rutas de express
-const verifyToken = require('./validate_token');
+// const verifyToken = require('./validate_token'); TODO: descomentar cuando accedamos con token.
 
 const animalSchema = require("../models/animal");
 
-router.get("/animals", verifyToken, ( _, res) => {
+router.get("/animals",  ( _, res) => { // TODO: Eliminar esta linea cuando hagamos token access
+//router.get("/animals", verifyToken, ( _, res) => { TODO: de momento estamos accediendo sin token, comentado por ahora
     animalSchema
         .find()
         .then((data) => res.json(data))
